@@ -9,22 +9,22 @@
 import UIKit
 import WebKit
 
-final class FirstViewController: UIViewController, UIScrollViewDelegate {
+final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentScrollable {
 
     private var webView: WKWebView = {
         let webView = WKWebView()
         webView.translatesAutoresizingMaskIntoConstraints = false
-        let url = URL(string: "https://www.apple.com/")
+        let url = URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")
         let urlRequest = URLRequest(url: url!)
         webView.load(urlRequest)
         return webView
     }()
 
+    var silentScrolly: SilentScrolly?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        webView.scrollView.contentInset.top = 64
-        webView.scrollView.scrollIndicatorInsets.top = 64
         webView.scrollView.delegate = self
         view.addSubview(webView)
 
@@ -50,8 +50,13 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate {
                                                      action: #selector(tapRightShowBarButtonItem))
         navigationItem.setRightBarButton(rightShowBarButtonItem, animated: true)
 
-        navigationController?.navigationBar.barTintColor = .green
         navigationItem.title = "First"
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        setSilentScrolly(webView.scrollView)
     }
 
     @objc private func tapRightShowBarButtonItem() {
@@ -86,23 +91,31 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate {
         return 1 - (contentOffsetY / 44)
     }
 
-    private var prevContentOffSetY: CGFloat = 0
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        decideNavigationBarState(scrollView)
+    }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let navigationBar = navigationController?.navigationBar else { return }
 
-        let offSetY = scrollView.contentOffset.y + scrollView.contentInset.top
-        webView.scrollView.scrollIndicatorInsets.top = calcWebViewInsetY(offSetY)
-        webView.scrollView.contentInset.top = calcWebViewInsetY(offSetY)
-        navigationBar.frame.origin.y = calcNavigationBarOriginY(offSetY)
+        followNavigationBar(scrollView)
 
-        let alpha = calcNavigationBarAlpha(offSetY)
-        navigationItem.titleView?.alpha = alpha
-        navigationBar.tintColor = navigationBar.tintColor.withAlphaComponent(alpha)
-        if let titleColor = navigationBar.titleTextAttributes?[NSAttributedStringKey.foregroundColor] as? UIColor {
-            navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : titleColor.withAlphaComponent(alpha)]
-        } else {
-            navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.black.withAlphaComponent(alpha)]
-        }
+//        guard let navigationBar = navigationController?.navigationBar else { return }
+//
+//        let offSetY = scrollView.contentOffset.y + scrollView.contentInset.top
+//        webView.scrollView.scrollIndicatorInsets.top = calcWebViewInsetY(offSetY)
+//        webView.scrollView.contentInset.top = calcWebViewInsetY(offSetY)
+//        navigationBar.frame.origin.y = calcNavigationBarOriginY(offSetY)
+//
+//        let alpha = calcNavigationBarAlpha(offSetY)
+//        navigationItem.titleView?.alpha = alpha
+//        navigationBar.tintColor = navigationBar.tintColor.withAlphaComponent(alpha)
+//        if let titleColor = navigationBar.titleTextAttributes?[NSAttributedStringKey.foregroundColor] as? UIColor {
+//            navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : titleColor.withAlphaComponent(alpha)]
+//        } else {
+//            navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.black.withAlphaComponent(alpha)]
+//        }
     }
 }

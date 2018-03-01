@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6154F5ED203B1CC600040F47 /* SilentScrolly.h in Headers */ = {isa = PBXBuildFile; fileRef = 6154F5EB203B1CC600040F47 /* SilentScrolly.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		616FDD5E203E7F7800471282 /* SilentScrollable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FDD5D203E7F7800471282 /* SilentScrollable.swift */; };
+		616FDD60203E83DA00471282 /* SilentScrolly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FDD5F203E83DA00471282 /* SilentScrolly.swift */; };
 		61766042203BDC520049B35E /* TabBarController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61766041203BDC520049B35E /* TabBarController.storyboard */; };
 		61766044203BDC7A0049B35E /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61766043203BDC7A0049B35E /* TabBarController.swift */; };
 		61766046203BDCA00049B35E /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61766045203BDCA00049B35E /* SecondViewController.swift */; };
@@ -22,6 +24,8 @@
 		6154F5E8203B1CC600040F47 /* SilentScrolly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SilentScrolly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6154F5EB203B1CC600040F47 /* SilentScrolly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SilentScrolly.h; sourceTree = "<group>"; };
 		6154F5EC203B1CC600040F47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		616FDD5D203E7F7800471282 /* SilentScrollable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentScrollable.swift; sourceTree = "<group>"; };
+		616FDD5F203E83DA00471282 /* SilentScrolly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilentScrolly.swift; sourceTree = "<group>"; };
 		61766023203BCD6D0049B35E /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61766037203BDC2F0049B35E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61766038203BDC2F0049B35E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -104,6 +108,8 @@
 				6176603A203BDC2F0049B35E /* First */,
 				6176603B203BDC2F0049B35E /* Second */,
 				6176603C203BDC2F0049B35E /* TabBar */,
+				616FDD5D203E7F7800471282 /* SilentScrollable.swift */,
+				616FDD5F203E83DA00471282 /* SilentScrolly.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -196,6 +202,7 @@
 				TargetAttributes = {
 					6154F5E7203B1CC600040F47 = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					61766022203BCD6D0049B35E = {
@@ -260,6 +267,8 @@
 				6176604D203BDD330049B35E /* AppDelegate.swift in Sources */,
 				6176604C203BDCCD0049B35E /* FirstViewController.swift in Sources */,
 				61766046203BDCA00049B35E /* SecondViewController.swift in Sources */,
+				616FDD60203E83DA00471282 /* SilentScrolly.swift in Sources */,
+				616FDD5E203E7F7800471282 /* SilentScrollable.swift in Sources */,
 				61766044203BDC7A0049B35E /* TabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -383,6 +392,7 @@
 		6154F5F1203B1CC600040F47 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -396,6 +406,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = TakumaHoriuchi.SilentScrolly;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -404,6 +415,7 @@
 		6154F5F2203B1CC600040F47 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
