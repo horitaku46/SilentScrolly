@@ -50,7 +50,10 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
                                                      action: #selector(tapRightShowBarButtonItem))
         navigationItem.setRightBarButton(rightShowBarButtonItem, animated: true)
 
-        navigationItem.title = "First"
+        let label = UILabel()
+        label.text = "First"
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        navigationItem.titleView = label
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,58 +67,11 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
         navigationController?.show(viewController, sender: nil)
     }
 
-    private func calcNavigationBarOriginY(_ contentOffsetY: CGFloat) -> CGFloat {
-        if contentOffsetY <= 0 {
-            return 20
-        } else if 44 <= contentOffsetY {
-            return -24
-        }
-        return 20 - contentOffsetY
-    }
-
-    private func calcWebViewInsetY(_ contentOffsetY: CGFloat) -> CGFloat {
-        if contentOffsetY <= 0 {
-            return 64
-        } else if 44 <= contentOffsetY {
-            return 20
-        }
-        return 64 - contentOffsetY
-    }
-
-    func calcNavigationBarAlpha(_ contentOffsetY: CGFloat) -> CGFloat {
-        if contentOffsetY <= 0 {
-            return 1
-        } else if 44 <= contentOffsetY {
-            return 0
-        }
-        return 1 - (contentOffsetY / 44)
-    }
-
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        followNavigationBar(scrollView)
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         decideNavigationBarState(scrollView)
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-        followNavigationBar(scrollView)
-
-//        guard let navigationBar = navigationController?.navigationBar else { return }
-//
-//        let offSetY = scrollView.contentOffset.y + scrollView.contentInset.top
-//        webView.scrollView.scrollIndicatorInsets.top = calcWebViewInsetY(offSetY)
-//        webView.scrollView.contentInset.top = calcWebViewInsetY(offSetY)
-//        navigationBar.frame.origin.y = calcNavigationBarOriginY(offSetY)
-//
-//        let alpha = calcNavigationBarAlpha(offSetY)
-//        navigationItem.titleView?.alpha = alpha
-//        navigationBar.tintColor = navigationBar.tintColor.withAlphaComponent(alpha)
-//        if let titleColor = navigationBar.titleTextAttributes?[NSAttributedStringKey.foregroundColor] as? UIColor {
-//            navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : titleColor.withAlphaComponent(alpha)]
-//        } else {
-//            navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.black.withAlphaComponent(alpha)]
-//        }
     }
 }
