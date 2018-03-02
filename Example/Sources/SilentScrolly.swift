@@ -15,22 +15,16 @@ struct SilentScrolly {
         static let animateDuration: TimeInterval = 0.3
     }
 
-    enum BarState: Int {
-        case show
-        case incomplete
-        case hide
-    }
-
     var prevPositiveContentOffsetY: CGFloat = 0
 
     var firstNavigationBarFrameOriginY: CGFloat = 0
     var lastNavigationBarFrameOriginY: CGFloat = 0
-
     var firstContentInsetTop: CGFloat = 0
     var lastContentInsetTop: CGFloat = 0
 
-    var firstScrollIndicatorInsetsTop: CGFloat = 0
-    var lastScrollIndicatorInsetsTop: CGFloat = 0
-
-    var barState: BarState = .show
+    var bottomView: UIView?
+    var firstBottomViewFrameOriginY: CGFloat = 0
+    var lastBottomViewFrameOriginY: CGFloat = 0
+    var firstContentInsetBottom: CGFloat = 0
+    var lastContentInsetBottom: CGFloat = 0
 }

@@ -59,7 +59,7 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        setSilentScrolly(webView.scrollView)
+        setSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
     }
 
     @objc private func tapRightShowBarButtonItem() {

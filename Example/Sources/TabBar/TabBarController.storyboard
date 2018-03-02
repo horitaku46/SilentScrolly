@@ -36,11 +36,11 @@
             </objects>
             <point key="canvasLocation" x="-1907" y="-885"/>
         </scene>
-        <!--Item 1-->
+        <!--First-->
         <scene sceneID="YlT-zF-Rdi">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eC1-y6-pez" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item 1" id="Sqo-B6-nxk"/>
+                    <tabBarItem key="tabBarItem" title="First" id="Sqo-B6-nxk"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="klo-jc-9DM">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
