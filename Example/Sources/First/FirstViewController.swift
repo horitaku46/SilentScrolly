@@ -27,7 +27,6 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
 
         webView.scrollView.delegate = self
         view.addSubview(webView)
-
         if #available(iOS 11.0, *) {
             NSLayoutConstraint.activate([
                 webView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -64,6 +63,7 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
 
     @objc private func tapRightShowBarButtonItem() {
         let viewController = SecondViewController.make()
+        viewController.hidesBottomBarWhenPushed = true
         navigationController?.show(viewController, sender: nil)
     }
 

@@ -17,13 +17,27 @@
                     <view key="view" contentMode="scaleToFill" id="zkc-S2-tj1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DY3-zq-czT">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items/>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="DY3-zq-czT" firstAttribute="leading" secondItem="y66-im-F3y" secondAttribute="leading" id="XfT-3Q-lAj"/>
+                            <constraint firstItem="DY3-zq-czT" firstAttribute="trailing" secondItem="y66-im-F3y" secondAttribute="trailing" id="fFK-CP-Rt0"/>
+                            <constraint firstItem="DY3-zq-czT" firstAttribute="bottom" secondItem="y66-im-F3y" secondAttribute="bottom" id="jJ8-LG-WYd"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="y66-im-F3y"/>
                     </view>
+                    <connections>
+                        <outlet property="toolBar" destination="DY3-zq-czT" id="ZOI-5Y-hfg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f2w-Nc-njg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="44" y="152"/>
+            <point key="canvasLocation" x="122" y="150"/>
         </scene>
     </scenes>
 </document>

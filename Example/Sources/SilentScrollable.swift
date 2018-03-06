@@ -30,8 +30,8 @@ extension SilentScrollable where Self: UIViewController {
 
         if let bottomView = followBottomView {
             silentScrolly?.bottomView = bottomView
-            silentScrolly?.firstBottomViewFrameOriginY = bottomView.frame.origin.y
-            silentScrolly?.lastBottomViewFrameOriginY = bottomView.frame.origin.y + bottomView.frame.height
+            silentScrolly?.firstBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomView.frame.height
+            silentScrolly?.lastBottomViewFrameOriginY = UIScreen.main.bounds.height
             silentScrolly?.firstContentInsetBottom = scrollView.contentInset.bottom
             silentScrolly?.lastContentInsetBottom = scrollView.contentInset.bottom - bottomView.frame.height
         }
@@ -113,7 +113,7 @@ extension SilentScrollable where Self: UIViewController {
     }
 
     private func animateBottomView(_ scrollView: UIScrollView, isShow: Bool) {
-        guard let _ = silentScrolly?.bottomView,
+        guard let bottomView = silentScrolly?.bottomView,
             let firstBottomViewFrameOriginY = silentScrolly?.firstBottomViewFrameOriginY,
             let lastBottomViewFrameOriginY = silentScrolly?.lastBottomViewFrameOriginY,
             let firstContentInsetBottom = silentScrolly?.firstContentInsetBottom,
@@ -125,7 +125,7 @@ extension SilentScrollable where Self: UIViewController {
         let eitherContentInsetBottom = isShow ? firstContentInsetBottom : lastContentInsetBottom
 
         UIView.animate(withDuration: SilentScrolly.Const.animateDuration) {
-            self.tabBarController?.tabBar.frame.origin.y = eitherBottomViewFrameOriginY
+            bottomView.frame.origin.y = eitherBottomViewFrameOriginY
             scrollView.contentInset.bottom = eitherContentInsetBottom
             scrollView.scrollIndicatorInsets.bottom = eitherContentInsetBottom
         }
