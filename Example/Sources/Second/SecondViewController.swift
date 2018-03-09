@@ -33,6 +33,9 @@ final class SecondViewController: UIViewController, SilentScrollable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.hidesBarsOnSwipe = true
+
+        webView.navigationDelegate = self
         webView.scrollView.delegate = self
         view.addSubview(webView)
         if #available(iOS 11.0, *) {
@@ -61,8 +64,17 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureSilentScrolly(webView.scrollView, followBottomView: toolBar)
+    }
 
-        setSilentScrolly(webView.scrollView, followBottomView: toolBar)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        orientationChange()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        showNavigationBar()
     }
 }
 
@@ -79,5 +91,12 @@ extension SecondViewController: UIScrollViewDelegate {
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         showNavigationBar()
         return true
+    }
+}
+
+extension SecondViewController: WKNavigationDelegate {
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        showNavigationBar()
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentScrollable {
+final class FirstViewController: UIViewController, SilentScrollable {
 
     private var webView: WKWebView = {
         let webView = WKWebView()
@@ -25,6 +25,7 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        webView.navigationDelegate = self
         webView.scrollView.delegate = self
         view.addSubview(webView)
         if #available(iOS 11.0, *) {
@@ -57,7 +58,12 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
+        configureSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        orientationChange()
     }
 
     @objc private func tapRightShowBarButtonItem() {
@@ -65,6 +71,9 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
         viewController.hidesBottomBarWhenPushed = true
         navigationController?.show(viewController, sender: nil)
     }
+}
+
+extension FirstViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         followNavigationBar()
@@ -77,5 +86,12 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         showNavigationBar()
         return true
+    }
+}
+
+extension FirstViewController: WKNavigationDelegate {
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        showNavigationBar()
     }
 }

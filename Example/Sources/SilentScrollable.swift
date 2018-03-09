@@ -14,7 +14,7 @@ protocol SilentScrollable: class {
 
 extension SilentScrollable where Self: UIViewController {
 
-    func setSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil) {
+    func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
         guard let navigationBarFrame = navigationController?.navigationBar.frame else {
             return
         }
@@ -37,19 +37,21 @@ extension SilentScrollable where Self: UIViewController {
             silentScrolly?.lastContentInsetBottom = scrollView.contentInset.bottom - bottomView.frame.height
         }
 
-        NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: nil) { [weak self] in
-            self?.didBecomeActive($0)
+        if isAddObserver {
+            NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive,
+                                                   object: nil,
+                                                   queue: nil) { [weak self] in
+                self?.didBecomeActive($0)
+            }
         }
     }
 
-    private func didBecomeActive(_ notification: Notification) {
-        if isViewLoaded && view.window != nil {
-            guard let scrollView = silentScrolly?.scrollView,
-                let isShow = silentScrolly?.isNavigationBarShow else {
-                return
-            }
-            adjustEitherView(scrollView, isShow: isShow, animated: false)
+    func orientationChange() {
+        guard let scrollView = silentScrolly?.scrollView else {
+            return
         }
+        showNavigationBar()
+        configureSilentScrolly(scrollView, followBottomView: silentScrolly?.bottomView, isAddObserver: false)
     }
 
     func followNavigationBar() {
@@ -202,6 +204,16 @@ extension SilentScrollable where Self: UIViewController {
             navigationBar.titleTextAttributes = [.foregroundColor : titleColor.withAlphaComponent(alpha)]
         } else {
             navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black.withAlphaComponent(alpha)]
+        }
+    }
+
+    private func didBecomeActive(_ notification: Notification) {
+        if isViewLoaded && view.window != nil {
+            guard let scrollView = silentScrolly?.scrollView,
+                let isShow = silentScrolly?.isNavigationBarShow else {
+                    return
+            }
+            adjustEitherView(scrollView, isShow: isShow, animated: false)
         }
     }
 }
