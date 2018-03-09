@@ -57,7 +57,6 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         setSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
     }
 
@@ -68,10 +67,15 @@ final class FirstViewController: UIViewController, UIScrollViewDelegate, SilentS
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        followNavigationBar(scrollView)
+        followNavigationBar()
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        decideNavigationBarState(scrollView)
+        decideNavigationBarState()
+    }
+
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        showNavigationBar()
+        return true
     }
 }

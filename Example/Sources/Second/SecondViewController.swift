@@ -69,10 +69,15 @@ final class SecondViewController: UIViewController, SilentScrollable {
 extension SecondViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        followNavigationBar(scrollView)
+        followNavigationBar()
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        decideNavigationBarState(scrollView)
+        decideNavigationBarState()
+    }
+
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        showNavigationBar()
+        return true
     }
 }

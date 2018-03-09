@@ -15,12 +15,17 @@ struct SilentScrolly {
         static let animateDuration: TimeInterval = 0.3
     }
 
+    var scrollView: UIScrollView? = nil
+
+    var isNavigationBarShow = true
+    var isNavigationbarAnimateCompleted = true
+
     var prevPositiveContentOffsetY: CGFloat = 0
 
     var firstNavigationBarFrameOriginY: CGFloat = 0
     var lastNavigationBarFrameOriginY: CGFloat = 0
-    var firstContentInsetTop: CGFloat = 0
-    var lastContentInsetTop: CGFloat = 0
+    var firstScrollIndicatorInsetsTop: CGFloat = 0
+    var lastScrollIndicatorInsetsTop: CGFloat = 0
 
     var bottomView: UIView?
     var firstBottomViewFrameOriginY: CGFloat = 0
