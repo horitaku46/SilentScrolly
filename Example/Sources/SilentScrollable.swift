@@ -15,26 +15,26 @@ protocol SilentScrollable: class {
 extension SilentScrollable where Self: UIViewController {
 
     func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
-        guard let navigationBarFrame = navigationController?.navigationBar.frame else {
+        guard let navigationBarBounds = navigationController?.navigationBar.bounds else {
             return
         }
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
-        let totalHeight = statusBarHeight + navigationBarFrame.height
+        let totalHeight = statusBarHeight + navigationBarBounds.height
 
         silentScrolly = SilentScrolly()
         silentScrolly?.scrollView = scrollView
 
-        silentScrolly?.firstNavigationBarFrameOriginY = statusBarHeight
-        silentScrolly?.lastNavigationBarFrameOriginY = -navigationBarFrame.height
-        silentScrolly?.firstScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
-        silentScrolly?.lastScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
+        silentScrolly?.showNavigationBarFrameOriginY = statusBarHeight
+        silentScrolly?.hideNavigationBarFrameOriginY = -navigationBarBounds.height
+        silentScrolly?.showScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
+        silentScrolly?.hideScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
 
         if let bottomView = followBottomView {
             silentScrolly?.bottomView = bottomView
-            silentScrolly?.firstBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomView.frame.height
-            silentScrolly?.lastBottomViewFrameOriginY = UIScreen.main.bounds.height
-            silentScrolly?.firstContentInsetBottom = bottomView is UITabBar ? 0 : bottomView.frame.height
-            silentScrolly?.lastContentInsetBottom = bottomView is UITabBar ? -bottomView.frame.height : 0
+            silentScrolly?.showBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomView.bounds.height
+            silentScrolly?.hideBottomViewFrameOriginY = UIScreen.main.bounds.height
+            silentScrolly?.showContentInsetBottom = bottomView is UITabBar ? 0 : bottomView.bounds.height
+            silentScrolly?.hideContentInsetBottom = bottomView is UITabBar ? -bottomView.bounds.height : 0
         }
 
         if isAddObserver {
@@ -95,7 +95,7 @@ extension SilentScrollable where Self: UIViewController {
 
     func decideNavigationBarState() {
         guard let scrollView = silentScrolly?.scrollView,
-            let firstNavigationBarFrameOriginY = silentScrolly?.firstNavigationBarFrameOriginY,
+            let showNavigationBarFrameOriginY = silentScrolly?.showNavigationBarFrameOriginY,
             let currentNavigationBarOriginY = navigationController?.navigationBar.frame.origin.y else {
                 return
         }
@@ -106,7 +106,7 @@ extension SilentScrollable where Self: UIViewController {
         }
 
         let velocityY = scrollView.panGestureRecognizer.velocity(in: view).y
-        let navigationBarMoveDistance = fabs(currentNavigationBarOriginY - firstNavigationBarFrameOriginY)
+        let navigationBarMoveDistance = fabs(currentNavigationBarOriginY - showNavigationBarFrameOriginY)
 
         if velocityY < SilentScrolly.Const.maxFluctuateNavigationBarVelocityY {
             navigationBarMoveDistance > 0 ? adjustEitherView(scrollView, isShow: false) : adjustEitherView(scrollView, isShow: true)
@@ -119,7 +119,6 @@ extension SilentScrollable where Self: UIViewController {
         guard let scrollView = silentScrolly?.scrollView else {
             return
         }
-        setNavigationBarAlpha(isClear: false) // When hide not effect
         adjustEitherView(scrollView, isShow: true)
     }
 
@@ -135,10 +134,10 @@ extension SilentScrollable where Self: UIViewController {
 
     private func adjustEitherView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true, completion: (() -> Void)? = nil) {
         guard let isNavigationbarAnimateCompleted = silentScrolly?.isNavigationbarAnimateCompleted,
-            let firstNavigationBarFrameOriginY = silentScrolly?.firstNavigationBarFrameOriginY,
-            let lastNavigationBarFrameOriginY = silentScrolly?.lastNavigationBarFrameOriginY,
-            let firstScrollIndicatorInsetsTop = silentScrolly?.firstScrollIndicatorInsetsTop,
-            let lastScrollIndicatorInsetsTop = silentScrolly?.lastScrollIndicatorInsetsTop,
+            let showNavigationBarFrameOriginY = silentScrolly?.showNavigationBarFrameOriginY,
+            let hideNavigationBarFrameOriginY = silentScrolly?.hideNavigationBarFrameOriginY,
+            let showScrollIndicatorInsetsTop = silentScrolly?.showScrollIndicatorInsetsTop,
+            let hideScrollIndicatorInsetsTop = silentScrolly?.hideScrollIndicatorInsetsTop,
             let currentNavigationBarOriginY = navigationController?.navigationBar.frame.origin.y else {
                 return
         }
@@ -147,8 +146,8 @@ extension SilentScrollable where Self: UIViewController {
             return
         }
 
-        let eitherNavigationBarFrameOriginY = isShow ? firstNavigationBarFrameOriginY : lastNavigationBarFrameOriginY
-        let eitherScrollIndicatorInsetsTop = isShow ? firstScrollIndicatorInsetsTop : lastScrollIndicatorInsetsTop
+        let eitherNavigationBarFrameOriginY = isShow ? showNavigationBarFrameOriginY : hideNavigationBarFrameOriginY
+        let eitherScrollIndicatorInsetsTop = isShow ? showScrollIndicatorInsetsTop : hideScrollIndicatorInsetsTop
         let navigationBarContentsAlpha: CGFloat = isShow ? 1 : 0
 
         func setPosition() {
@@ -160,7 +159,6 @@ extension SilentScrollable where Self: UIViewController {
 
         if !animated {
             setPosition()
-            setNavigationBarAlpha(isClear: !isShow)
             animateBottomView(scrollView, isShow: isShow, animated: animated)
             completion?()
             return
@@ -168,12 +166,10 @@ extension SilentScrollable where Self: UIViewController {
 
         if currentNavigationBarOriginY != eitherNavigationBarFrameOriginY && scrollView.scrollIndicatorInsets.top != eitherScrollIndicatorInsetsTop {
             silentScrolly?.isNavigationbarAnimateCompleted = false
-            isShow ? self.setNavigationBarAlpha(isClear: false) : nil
 
             UIView.animate(withDuration: SilentScrolly.Const.animateDuration, animations: {
                 setPosition()
             }, completion: { _ in
-                isShow ? nil : self.setNavigationBarAlpha(isClear: true)
                 self.silentScrolly?.isNavigationbarAnimateCompleted = true
             })
 
@@ -183,15 +179,15 @@ extension SilentScrollable where Self: UIViewController {
 
     private func animateBottomView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true) {
         guard let bottomView = silentScrolly?.bottomView,
-            let firstBottomViewFrameOriginY = silentScrolly?.firstBottomViewFrameOriginY,
-            let lastBottomViewFrameOriginY = silentScrolly?.lastBottomViewFrameOriginY,
-            let firstContentInsetBottom = silentScrolly?.firstContentInsetBottom,
-            let lastContentInsetBottom = silentScrolly?.lastContentInsetBottom else {
+            let showBottomViewFrameOriginY = silentScrolly?.showBottomViewFrameOriginY,
+            let hideBottomViewFrameOriginY = silentScrolly?.hideBottomViewFrameOriginY,
+            let showContentInsetBottom = silentScrolly?.showContentInsetBottom,
+            let hideContentInsetBottom = silentScrolly?.hideContentInsetBottom else {
             return
         }
 
-        let eitherBottomViewFrameOriginY = isShow ? firstBottomViewFrameOriginY : lastBottomViewFrameOriginY
-        let eitherContentInsetBottom = isShow ? firstContentInsetBottom : lastContentInsetBottom
+        let eitherBottomViewFrameOriginY = isShow ? showBottomViewFrameOriginY : hideBottomViewFrameOriginY
+        let eitherContentInsetBottom = isShow ? showContentInsetBottom : hideContentInsetBottom
 
         func setPosition() {
             bottomView.frame.origin.y = eitherBottomViewFrameOriginY
@@ -207,12 +203,6 @@ extension SilentScrollable where Self: UIViewController {
         UIView.animate(withDuration: SilentScrolly.Const.animateDuration) {
             setPosition()
         }
-    }
-
-    private func setNavigationBarAlpha(isClear: Bool) {
-        let image = isClear ? UIImage() : nil
-        navigationController?.navigationBar.setBackgroundImage(image, for: .default)
-        navigationController?.navigationBar.shadowImage = image
     }
 
     private func setNavigationBarContentsAlpha(_ alpha: CGFloat) {

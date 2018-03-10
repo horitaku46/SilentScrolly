@@ -22,14 +22,14 @@ struct SilentScrolly {
 
     var prevPositiveContentOffsetY: CGFloat = 0
 
-    var firstNavigationBarFrameOriginY: CGFloat = 0
-    var lastNavigationBarFrameOriginY: CGFloat = 0
-    var firstScrollIndicatorInsetsTop: CGFloat = 0
-    var lastScrollIndicatorInsetsTop: CGFloat = 0
+    var showNavigationBarFrameOriginY: CGFloat = 0
+    var hideNavigationBarFrameOriginY: CGFloat = 0
+    var showScrollIndicatorInsetsTop: CGFloat = 0
+    var hideScrollIndicatorInsetsTop: CGFloat = 0
 
     var bottomView: UIView?
-    var firstBottomViewFrameOriginY: CGFloat = 0
-    var lastBottomViewFrameOriginY: CGFloat = 0
-    var firstContentInsetBottom: CGFloat = 0
-    var lastContentInsetBottom: CGFloat = 0
+    var showBottomViewFrameOriginY: CGFloat = 0
+    var hideBottomViewFrameOriginY: CGFloat = 0
+    var showContentInsetBottom: CGFloat = 0
+    var hideContentInsetBottom: CGFloat = 0
 }
