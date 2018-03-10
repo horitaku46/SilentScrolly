@@ -38,14 +38,9 @@ final class FirstViewController: UIViewController, SilentScrollable {
         navigationItem.titleView = label
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         configureSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        orientationChange()
     }
 
     @objc private func tapRightShowBarButtonItem() {

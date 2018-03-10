@@ -40,14 +40,9 @@ final class SecondViewController: UIViewController, SilentScrollable {
         navigationItem.titleView = label
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         configureSilentScrolly(webView.scrollView, followBottomView: toolBar)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        orientationChange()
     }
 
     override func viewWillDisappear(_ animated: Bool) {

@@ -24,7 +24,7 @@ extension SilentScrollable where Self: UIViewController {
         silentScrolly = SilentScrolly()
         silentScrolly?.scrollView = scrollView
 
-        silentScrolly?.firstNavigationBarFrameOriginY = navigationBarFrame.origin.y
+        silentScrolly?.firstNavigationBarFrameOriginY = statusBarHeight
         silentScrolly?.lastNavigationBarFrameOriginY = -navigationBarFrame.height
         silentScrolly?.firstScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
         silentScrolly?.lastScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
@@ -38,20 +38,39 @@ extension SilentScrollable where Self: UIViewController {
         }
 
         if isAddObserver {
-            NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive,
-                                                   object: nil,
-                                                   queue: nil) { [weak self] in
+            NotificationCenter.default.addObserver(forName: .UIDeviceOrientationDidChange, object: nil, queue: nil) { [weak self] in
+                self?.orientationDidChange($0)
+            }
+            NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: nil) { [weak self] in
                 self?.didBecomeActive($0)
             }
         }
     }
 
-    func orientationChange() {
-        guard let scrollView = silentScrolly?.scrollView else {
+    private func orientationDidChange(_ notification: Notification) {
+        guard isViewLoaded,
+            let _ = view.window,
+            let scrollView = silentScrolly?.scrollView else {
             return
         }
-        showNavigationBar()
-        configureSilentScrolly(scrollView, followBottomView: silentScrolly?.bottomView, isAddObserver: false)
+        // First, show navigationBar and bottomView
+        adjustEitherView(scrollView, isShow: true, animated: false) { [weak self] in
+            guard let me = self else { return }
+            // Second, recalculation
+            me.configureSilentScrolly(scrollView, followBottomView: me.silentScrolly?.bottomView, isAddObserver: false)
+        }
+        // Third, set new value
+        adjustEitherView(scrollView, isShow: true, animated: false)
+    }
+
+    private func didBecomeActive(_ notification: Notification) {
+        guard isViewLoaded,
+            let _ = view.window,
+            let scrollView = silentScrolly?.scrollView,
+            let isShow = silentScrolly?.isNavigationBarShow else {
+                return
+        }
+        adjustEitherView(scrollView, isShow: isShow, animated: false)
     }
 
     func followNavigationBar() {
@@ -100,6 +119,7 @@ extension SilentScrollable where Self: UIViewController {
         guard let scrollView = silentScrolly?.scrollView else {
             return
         }
+        setNavigationBarAlpha(isClear: false) // When hide not effect
         adjustEitherView(scrollView, isShow: true)
     }
 
@@ -113,7 +133,7 @@ extension SilentScrollable where Self: UIViewController {
         return velocityY <= 0
     }
 
-    private func adjustEitherView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true) {
+    private func adjustEitherView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true, completion: (() -> Void)? = nil) {
         guard let isNavigationbarAnimateCompleted = silentScrolly?.isNavigationbarAnimateCompleted,
             let firstNavigationBarFrameOriginY = silentScrolly?.firstNavigationBarFrameOriginY,
             let lastNavigationBarFrameOriginY = silentScrolly?.lastNavigationBarFrameOriginY,
@@ -135,13 +155,14 @@ extension SilentScrollable where Self: UIViewController {
             navigationController?.navigationBar.frame.origin.y = eitherNavigationBarFrameOriginY
             scrollView.scrollIndicatorInsets.top = eitherScrollIndicatorInsetsTop
             setNavigationBarContentsAlpha(navigationBarContentsAlpha)
-
             silentScrolly?.isNavigationBarShow = isShow
         }
 
         if !animated {
             setPosition()
+            setNavigationBarAlpha(isClear: !isShow)
             animateBottomView(scrollView, isShow: isShow, animated: animated)
+            completion?()
             return
         }
 
@@ -200,20 +221,5 @@ extension SilentScrollable where Self: UIViewController {
         }
         navigationItem.titleView?.alpha = alpha
         navigationBar.tintColor = navigationBar.tintColor.withAlphaComponent(alpha)
-        if let titleColor = navigationBar.titleTextAttributes?[.foregroundColor] as? UIColor {
-            navigationBar.titleTextAttributes = [.foregroundColor : titleColor.withAlphaComponent(alpha)]
-        } else {
-            navigationBar.titleTextAttributes = [.foregroundColor : UIColor.black.withAlphaComponent(alpha)]
-        }
-    }
-
-    private func didBecomeActive(_ notification: Notification) {
-        if isViewLoaded && view.window != nil {
-            guard let scrollView = silentScrolly?.scrollView,
-                let isShow = silentScrolly?.isNavigationBarShow else {
-                    return
-            }
-            adjustEitherView(scrollView, isShow: isShow, animated: false)
-        }
     }
 }
