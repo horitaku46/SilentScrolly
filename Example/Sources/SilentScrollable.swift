@@ -33,8 +33,8 @@ extension SilentScrollable where Self: UIViewController {
             silentScrolly?.bottomView = bottomView
             silentScrolly?.firstBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomView.frame.height
             silentScrolly?.lastBottomViewFrameOriginY = UIScreen.main.bounds.height
-            silentScrolly?.firstContentInsetBottom = scrollView.contentInset.bottom
-            silentScrolly?.lastContentInsetBottom = scrollView.contentInset.bottom - bottomView.frame.height
+            silentScrolly?.firstContentInsetBottom = bottomView is UITabBar ? 0 : bottomView.frame.height
+            silentScrolly?.lastContentInsetBottom = bottomView is UITabBar ? -bottomView.frame.height : 0
         }
 
         if isAddObserver {

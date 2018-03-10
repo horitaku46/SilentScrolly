@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,13 +16,32 @@
                     <view key="view" contentMode="scaleToFill" id="4iI-lO-5rC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0BN-H4-vzb">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0BN-H4-vzb" firstAttribute="leading" secondItem="r23-d1-F85" secondAttribute="leading" id="1Ic-RA-cMD"/>
+                            <constraint firstItem="0BN-H4-vzb" firstAttribute="bottom" secondItem="4iI-lO-5rC" secondAttribute="bottom" id="auv-p0-fQg"/>
+                            <constraint firstItem="0BN-H4-vzb" firstAttribute="trailing" secondItem="r23-d1-F85" secondAttribute="trailing" id="cTk-67-FY8"/>
+                            <constraint firstItem="0BN-H4-vzb" firstAttribute="top" secondItem="4iI-lO-5rC" secondAttribute="top" id="xDm-xb-qIg"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="r23-d1-F85"/>
                     </view>
+                    <connections>
+                        <outlet property="webView" destination="0BN-H4-vzb" id="gnM-0i-aAT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9zZ-Ec-SuC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="68" y="148"/>
+            <point key="canvasLocation" x="68" y="147.97601199400302"/>
         </scene>
     </scenes>
 </document>

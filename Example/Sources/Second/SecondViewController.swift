@@ -16,15 +16,16 @@ final class SecondViewController: UIViewController, SilentScrollable {
             .instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
         return viewController
     }
-
-    private var webView: WKWebView = {
-        let webView = WKWebView()
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        let url = URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")
-        let urlRequest = URLRequest(url: url!)
-        webView.load(urlRequest)
-        return webView
-    }()
+    
+    @IBOutlet weak var webView: WKWebView! {
+        didSet {
+            webView.navigationDelegate = self
+            webView.scrollView.delegate = self
+            let url = URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")
+            let urlRequest = URLRequest(url: url!)
+            webView.load(urlRequest)
+        }
+    }
 
     @IBOutlet weak var toolBar: UIToolbar!
 
@@ -32,29 +33,6 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationController?.hidesBarsOnSwipe = true
-
-        webView.navigationDelegate = self
-        webView.scrollView.delegate = self
-        view.addSubview(webView)
-        if #available(iOS 11.0, *) {
-            NSLayoutConstraint.activate([
-                webView.topAnchor.constraint(equalTo: view.topAnchor),
-                webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-                webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-                ])
-        } else {
-            NSLayoutConstraint.activate([
-                webView.topAnchor.constraint(equalTo: view.topAnchor),
-                webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-                ])
-        }
-
-        view.bringSubview(toFront: toolBar)
 
         let label = UILabel()
         label.text = "Second"
