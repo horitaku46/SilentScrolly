@@ -20,5 +20,8 @@ final class TabBarController: UITabBarController {
         for (index, title) in Const.tabBarItemTitles.enumerated() {
             tabBar.items?[index].title = title
         }
+
+        tabBar.barTintColor = .darkGray
+        tabBar.tintColor = .white
     }
 }

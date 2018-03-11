@@ -27,7 +27,12 @@ final class SecondViewController: UIViewController, SilentScrollable {
         }
     }
 
-    @IBOutlet weak var toolBar: UIToolbar!
+    @IBOutlet weak var toolBar: UIToolbar! {
+        didSet {
+            toolBar.barTintColor = .darkGray
+            toolBar.tintColor = .white
+        }
+    }
 
     var silentScrolly: SilentScrolly?
 
@@ -36,6 +41,7 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
         let label = UILabel()
         label.text = "Second"
+        label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 17)
         navigationItem.titleView = label
     }

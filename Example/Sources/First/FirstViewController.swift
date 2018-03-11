@@ -34,6 +34,7 @@ final class FirstViewController: UIViewController, SilentScrollable {
 
         let label = UILabel()
         label.text = "First"
+        label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 17)
         navigationItem.titleView = label
     }

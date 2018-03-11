@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		61479F822054ED290008485F /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61479F812054ED290008485F /* NavigationController.swift */; };
 		6154F5ED203B1CC600040F47 /* SilentScrolly.h in Headers */ = {isa = PBXBuildFile; fileRef = 6154F5EB203B1CC600040F47 /* SilentScrolly.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		616FDD5E203E7F7800471282 /* SilentScrollable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FDD5D203E7F7800471282 /* SilentScrollable.swift */; };
 		616FDD60203E83DA00471282 /* SilentScrolly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616FDD5F203E83DA00471282 /* SilentScrolly.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		61479F812054ED290008485F /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		6154F5E8203B1CC600040F47 /* SilentScrolly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SilentScrolly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6154F5EB203B1CC600040F47 /* SilentScrolly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SilentScrolly.h; sourceTree = "<group>"; };
 		6154F5EC203B1CC600040F47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			children = (
 				61766041203BDC520049B35E /* TabBarController.storyboard */,
 				61766043203BDC7A0049B35E /* TabBarController.swift */,
+				61479F812054ED290008485F /* NavigationController.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				61766046203BDCA00049B35E /* SecondViewController.swift in Sources */,
 				616FDD60203E83DA00471282 /* SilentScrolly.swift in Sources */,
 				616FDD5E203E7F7800471282 /* SilentScrollable.swift in Sources */,
+				61479F822054ED290008485F /* NavigationController.swift in Sources */,
 				61766044203BDC7A0049B35E /* TabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

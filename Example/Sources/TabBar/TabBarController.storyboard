@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,7 +38,7 @@
         <!--First-->
         <scene sceneID="YlT-zF-Rdi">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eC1-y6-pez" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eC1-y6-pez" customClass="NavigationController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="First" id="Sqo-B6-nxk"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="klo-jc-9DM">
