@@ -11,6 +11,10 @@ import WebKit
 
 final class SecondViewController: UIViewController, SilentScrollable {
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle(showStyle: .lightContent, hideStyle: .default)
+    }
+
     class func make() -> UIViewController {
         let viewController = UIStoryboard(name: "SecondViewController", bundle: nil)
             .instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
@@ -48,7 +52,6 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        configureSilentScrolly(webView.scrollView)
         configureSilentScrolly(webView.scrollView, followBottomView: toolBar)
     }
 

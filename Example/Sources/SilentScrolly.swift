@@ -15,6 +15,10 @@ struct SilentScrolly {
         static let animateDuration: TimeInterval = 0.3
     }
 
+    var preferredStatusBarStyle: UIStatusBarStyle? = nil
+    var showStatusBarStyle: UIStatusBarStyle = .default
+    var hideStatusBarStyle: UIStatusBarStyle = .default
+
     var scrollView: UIScrollView? = nil
 
     var isNavigationBarShow = true

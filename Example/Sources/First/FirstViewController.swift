@@ -11,6 +11,10 @@ import WebKit
 
 final class FirstViewController: UIViewController, SilentScrollable {
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return statusBarStyle(showStyle: .lightContent, hideStyle: .default)
+    }
+
     @IBOutlet weak var webView: WKWebView! {
         didSet {
             webView.navigationDelegate = self

@@ -14,6 +14,36 @@ protocol SilentScrollable: class {
 
 extension SilentScrollable where Self: UIViewController {
 
+    func statusBarStyle(showStyle: UIStatusBarStyle, hideStyle: UIStatusBarStyle) -> UIStatusBarStyle {
+        guard let _ = silentScrolly,
+            let preferredStatusBarStyle = silentScrolly?.preferredStatusBarStyle else {
+            silentScrolly = SilentScrolly()
+            silentScrolly?.preferredStatusBarStyle = showStyle
+            silentScrolly?.showStatusBarStyle = showStyle
+            silentScrolly?.hideStatusBarStyle = hideStyle
+            return showStyle
+        }
+        return preferredStatusBarStyle
+    }
+
+    private func setStatusBarAppearanceShow() {
+        guard let showStyle = silentScrolly?.showStatusBarStyle else {
+            return
+        }
+        print(showStyle.hashValue)
+        silentScrolly?.preferredStatusBarStyle = showStyle
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
+    private func setStatusBarAppearanceHide() {
+        guard let hideStyle = silentScrolly?.hideStatusBarStyle else {
+            return
+        }
+        print(hideStyle.hashValue)
+        silentScrolly?.preferredStatusBarStyle = hideStyle
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
     func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
         guard let navigationBarBounds = navigationController?.navigationBar.bounds,
             let safeAreaInsetsBottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom else {
@@ -22,7 +52,10 @@ extension SilentScrollable where Self: UIViewController {
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let totalHeight = statusBarHeight + navigationBarBounds.height
 
-        silentScrolly = SilentScrolly()
+        if silentScrolly == nil {
+            silentScrolly = SilentScrolly()
+        }
+
         silentScrolly?.scrollView = scrollView
 
         silentScrolly?.showNavigationBarFrameOriginY = statusBarHeight
@@ -154,6 +187,9 @@ extension SilentScrollable where Self: UIViewController {
         let navigationBarContentsAlpha: CGFloat = isShow ? 1 : 0
 
         func setPosition() {
+            if silentScrolly?.preferredStatusBarStyle != nil {
+                isShow ? setStatusBarAppearanceShow() : setStatusBarAppearanceHide()
+            }
             navigationController?.navigationBar.frame.origin.y = eitherNavigationBarFrameOriginY
             scrollView.scrollIndicatorInsets.top = eitherScrollIndicatorInsetsTop
             setNavigationBarContentsAlpha(navigationBarContentsAlpha)
