@@ -30,7 +30,6 @@ extension SilentScrollable where Self: UIViewController {
         guard let showStyle = silentScrolly?.showStatusBarStyle else {
             return
         }
-        print(showStyle.hashValue)
         silentScrolly?.preferredStatusBarStyle = showStyle
         setNeedsStatusBarAppearanceUpdate()
     }
@@ -39,7 +38,6 @@ extension SilentScrollable where Self: UIViewController {
         guard let hideStyle = silentScrolly?.hideStatusBarStyle else {
             return
         }
-        print(hideStyle.hashValue)
         silentScrolly?.preferredStatusBarStyle = hideStyle
         setNeedsStatusBarAppearanceUpdate()
     }
