@@ -43,12 +43,12 @@ extension SilentScrollable where Self: UIViewController {
     }
 
     func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
-        guard let navigationBarBounds = navigationController?.navigationBar.bounds,
+        guard let navigationBarHeight = navigationController?.navigationBar.bounds.height,
             let safeAreaInsetsBottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom else {
             return
         }
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
-        let totalHeight = statusBarHeight + navigationBarBounds.height
+        let totalHeight = statusBarHeight + navigationBarHeight
 
         if silentScrolly == nil {
             silentScrolly = SilentScrolly()
@@ -57,7 +57,7 @@ extension SilentScrollable where Self: UIViewController {
         silentScrolly?.scrollView = scrollView
 
         silentScrolly?.showNavigationBarFrameOriginY = statusBarHeight
-        silentScrolly?.hideNavigationBarFrameOriginY = -navigationBarBounds.height
+        silentScrolly?.hideNavigationBarFrameOriginY = -navigationBarHeight
         silentScrolly?.showScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
         silentScrolly?.hideScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
 
@@ -87,13 +87,11 @@ extension SilentScrollable where Self: UIViewController {
             let scrollView = silentScrolly?.scrollView else {
             return
         }
-        // First, show navigationBar and bottomView
+        // animation completed because the calculation is crazy
         adjustEitherView(scrollView, isShow: true, animated: false) { [weak self] in
             guard let me = self else { return }
-            // Second, recalculation
             me.configureSilentScrolly(scrollView, followBottomView: me.silentScrolly?.bottomView, isAddObserver: false)
         }
-        // Third, set new value
         adjustEitherView(scrollView, isShow: true, animated: false)
     }
 
