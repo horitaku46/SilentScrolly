@@ -48,6 +48,7 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        configureSilentScrolly(webView.scrollView)
         configureSilentScrolly(webView.scrollView, followBottomView: toolBar)
     }
 

@@ -15,7 +15,8 @@ protocol SilentScrollable: class {
 extension SilentScrollable where Self: UIViewController {
 
     func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
-        guard let navigationBarBounds = navigationController?.navigationBar.bounds else {
+        guard let navigationBarBounds = navigationController?.navigationBar.bounds,
+            let safeAreaInsetsBottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom else {
             return
         }
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
@@ -30,11 +31,13 @@ extension SilentScrollable where Self: UIViewController {
         silentScrolly?.hideScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
 
         if let bottomView = followBottomView {
+            let eitherSafeAreaInsetsBottom = bottomView is UITabBar ? 0 : safeAreaInsetsBottom
+            let bottomViewHeight = bottomView.bounds.height + eitherSafeAreaInsetsBottom
             silentScrolly?.bottomView = bottomView
-            silentScrolly?.showBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomView.bounds.height
+            silentScrolly?.showBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomViewHeight
             silentScrolly?.hideBottomViewFrameOriginY = UIScreen.main.bounds.height
-            silentScrolly?.showContentInsetBottom = bottomView is UITabBar ? 0 : bottomView.bounds.height
-            silentScrolly?.hideContentInsetBottom = bottomView is UITabBar ? -bottomView.bounds.height : 0
+            silentScrolly?.showContentInsetBottom = bottomView is UITabBar ? 0 : bottomViewHeight
+            silentScrolly?.hideContentInsetBottom = bottomView is UITabBar ? -bottomViewHeight : -eitherSafeAreaInsetsBottom
         }
 
         if isAddObserver {
