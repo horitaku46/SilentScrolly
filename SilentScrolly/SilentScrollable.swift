@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol SilentScrollable: class {
+public protocol SilentScrollable: class {
     var silentScrolly: SilentScrolly? { get set }
 }
 
-extension SilentScrollable where Self: UIViewController {
+public extension SilentScrollable where Self: UIViewController {
 
-    func statusBarStyle(showStyle: UIStatusBarStyle, hideStyle: UIStatusBarStyle) -> UIStatusBarStyle {
+    public func statusBarStyle(showStyle: UIStatusBarStyle, hideStyle: UIStatusBarStyle) -> UIStatusBarStyle {
         guard let _ = silentScrolly,
             let preferredStatusBarStyle = silentScrolly?.preferredStatusBarStyle else {
             silentScrolly = SilentScrolly()
@@ -42,7 +42,7 @@ extension SilentScrollable where Self: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
 
-    func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
+    public func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
         guard let navigationBarHeight = navigationController?.navigationBar.bounds.height,
             let safeAreaInsetsBottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom else {
             return
@@ -105,7 +105,7 @@ extension SilentScrollable where Self: UIViewController {
         adjustEitherView(scrollView, isShow: isShow, animated: false)
     }
 
-    func followNavigationBar() {
+    public func followNavigationBar() {
         guard let scrollView = silentScrolly?.scrollView,
             let prevPositiveContentOffsetY = silentScrolly?.prevPositiveContentOffsetY else {
                 return
@@ -125,7 +125,7 @@ extension SilentScrollable where Self: UIViewController {
         silentScrolly?.prevPositiveContentOffsetY = positiveContentOffsetY
     }
 
-    func decideNavigationBarState() {
+    public func decideNavigationBarState() {
         guard let scrollView = silentScrolly?.scrollView,
             let showNavigationBarFrameOriginY = silentScrolly?.showNavigationBarFrameOriginY,
             let currentNavigationBarOriginY = navigationController?.navigationBar.frame.origin.y else {
@@ -147,7 +147,7 @@ extension SilentScrollable where Self: UIViewController {
         }
     }
 
-    func showNavigationBar() {
+    public func showNavigationBar() {
         guard let scrollView = silentScrolly?.scrollView else {
             return
         }
