@@ -61,6 +61,7 @@ public extension SilentScrollable where Self: UIViewController {
         silentScrolly?.showScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
         silentScrolly?.hideScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
 
+        // FIXME: Because the following adjusts it to the setting that I showed with a example
         if let bottomView = followBottomView {
             let eitherSafeAreaInsetsBottom = bottomView is UITabBar ? 0 : safeAreaInsetsBottom
             let bottomViewHeight = bottomView.bounds.height + eitherSafeAreaInsetsBottom
