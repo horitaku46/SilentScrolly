@@ -20,16 +20,15 @@ final class SecondViewController: UIViewController, SilentScrollable {
             .instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
         return viewController
     }
-    
-    @IBOutlet weak var webView: WKWebView! {
-        didSet {
-            webView.navigationDelegate = self
-            webView.scrollView.delegate = self
-            let url = URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")
-            let urlRequest = URLRequest(url: url!)
-            webView.load(urlRequest)
-        }
-    }
+
+    private var webView: WKWebView = {
+        let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.ignoresViewportScaleLimits = true
+        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.load(URLRequest(url: URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")!))
+        return webView
+    }()
 
     @IBOutlet weak var toolBar: UIToolbar! {
         didSet {
@@ -42,6 +41,18 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        webView.navigationDelegate = self
+        webView.scrollView.delegate = self
+        view.addSubview(webView)
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            ])
+
+        view.bringSubview(toFront: toolBar)
 
         let label = UILabel()
         label.text = "Second"
@@ -65,6 +76,10 @@ extension SecondViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         followNavigationBar()
+    }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        hideNavigationBar()
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

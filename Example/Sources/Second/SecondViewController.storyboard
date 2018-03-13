@@ -17,14 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kgt-7S-Vif">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <wkWebViewConfiguration key="configuration">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DY3-zq-czT">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items/>
@@ -32,19 +24,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Kgt-7S-Vif" firstAttribute="trailing" secondItem="y66-im-F3y" secondAttribute="trailing" id="8Zb-6B-8Nj"/>
                             <constraint firstItem="DY3-zq-czT" firstAttribute="leading" secondItem="zkc-S2-tj1" secondAttribute="leading" id="XfT-3Q-lAj"/>
-                            <constraint firstItem="Kgt-7S-Vif" firstAttribute="top" secondItem="zkc-S2-tj1" secondAttribute="top" id="Ymc-US-Fmo"/>
-                            <constraint firstItem="Kgt-7S-Vif" firstAttribute="leading" secondItem="y66-im-F3y" secondAttribute="leading" id="eOa-tV-amQ"/>
                             <constraint firstItem="DY3-zq-czT" firstAttribute="trailing" secondItem="zkc-S2-tj1" secondAttribute="trailing" id="fFK-CP-Rt0"/>
                             <constraint firstItem="y66-im-F3y" firstAttribute="bottom" secondItem="DY3-zq-czT" secondAttribute="bottom" id="jJ8-LG-WYd"/>
-                            <constraint firstItem="Kgt-7S-Vif" firstAttribute="bottom" secondItem="zkc-S2-tj1" secondAttribute="bottom" id="vuO-bI-RMt"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="y66-im-F3y"/>
                     </view>
                     <connections>
                         <outlet property="toolBar" destination="DY3-zq-czT" id="ZOI-5Y-hfg"/>
-                        <outlet property="webView" destination="Kgt-7S-Vif" id="DVp-Yu-cBx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f2w-Nc-njg" userLabel="First Responder" sceneMemberID="firstResponder"/>

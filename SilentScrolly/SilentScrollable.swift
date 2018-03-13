@@ -112,7 +112,7 @@ public extension SilentScrollable where Self: UIViewController {
                 return
         }
 
-        if scrollView.contentSize.height < scrollView.bounds.height {
+        if scrollView.contentSize.height < scrollView.bounds.height || scrollView.isZooming {
             return
         }
 
@@ -153,6 +153,13 @@ public extension SilentScrollable where Self: UIViewController {
             return
         }
         adjustEitherView(scrollView, isShow: true)
+    }
+
+    public func hideNavigationBar() {
+        guard let scrollView = silentScrolly?.scrollView else {
+            return
+        }
+        adjustEitherView(scrollView, isShow: false)
     }
 
     private func calcPositiveContentOffsetY(_ scrollView: UIScrollView) -> CGFloat {
