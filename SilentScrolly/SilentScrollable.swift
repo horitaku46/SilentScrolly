@@ -116,36 +116,23 @@ public extension SilentScrollable where Self: UIViewController {
             return
         }
 
-        let velocityY = scrollView.panGestureRecognizer.velocity(in: view).y
-        let positiveContentOffsetY = calcPositiveContentOffsetY(scrollView)
-
-        if positiveContentOffsetY != prevPositiveContentOffsetY && scrollView.isTracking {
-            isScrollUp(velocityY) ? adjustEitherView(scrollView, isShow: false) : adjustEitherView(scrollView, isShow: true)
-        }
-
-        silentScrolly?.prevPositiveContentOffsetY = positiveContentOffsetY
-    }
-
-    public func decideNavigationBarState() {
-        guard let scrollView = silentScrolly?.scrollView,
-            let showNavigationBarFrameOriginY = silentScrolly?.showNavigationBarFrameOriginY,
-            let currentNavigationBarOriginY = navigationController?.navigationBar.frame.origin.y else {
-                return
-        }
-
-        if scrollView.contentOffset.y.isZero {
+        if scrollView.contentOffset.y <= 0 {
             adjustEitherView(scrollView, isShow: true)
             return
         }
 
+        let positiveContentOffsetY = calcPositiveContentOffsetY(scrollView)
         let velocityY = scrollView.panGestureRecognizer.velocity(in: view).y
-        let navigationBarMoveDistance = fabs(currentNavigationBarOriginY - showNavigationBarFrameOriginY)
 
-        if velocityY < SilentScrolly.Const.maxFluctuateNavigationBarVelocityY {
-            navigationBarMoveDistance > 0 ? adjustEitherView(scrollView, isShow: false) : adjustEitherView(scrollView, isShow: true)
-        } else {
-            isScrollUp(velocityY) ? adjustEitherView(scrollView, isShow: false) : adjustEitherView(scrollView, isShow: true)
+        if positiveContentOffsetY != prevPositiveContentOffsetY && scrollView.isTracking {
+            if velocityY < SilentScrolly.Const.minDoNothingAdjustNavigationBarVelocityY {
+                adjustEitherView(scrollView, isShow: false)
+            } else if velocityY > SilentScrolly.Const.maxDoNothingAdjustNavigationBarVelocityY {
+                adjustEitherView(scrollView, isShow: true)
+            }
         }
+
+        silentScrolly?.prevPositiveContentOffsetY = positiveContentOffsetY
     }
 
     public func showNavigationBar() {
@@ -166,10 +153,6 @@ public extension SilentScrollable where Self: UIViewController {
         var contentOffsetY = scrollView.contentOffset.y + scrollView.contentInset.top
         contentOffsetY = contentOffsetY > 0 ? contentOffsetY : 0
         return contentOffsetY
-    }
-
-    private func isScrollUp(_ velocityY: CGFloat) -> Bool {
-        return velocityY <= 0
     }
 
     private func adjustEitherView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true, completion: (() -> Void)? = nil) {

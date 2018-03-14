@@ -11,7 +11,8 @@ import UIKit
 public struct SilentScrolly {
 
     public enum Const {
-        public static let maxFluctuateNavigationBarVelocityY: CGFloat = 100
+        public static let minDoNothingAdjustNavigationBarVelocityY: CGFloat = 0
+        public static let maxDoNothingAdjustNavigationBarVelocityY: CGFloat = 1400
         public static let animateDuration: TimeInterval = 0.3
     }
 

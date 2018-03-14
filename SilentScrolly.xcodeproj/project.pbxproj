@@ -81,8 +81,8 @@
 		6154F5EA203B1CC600040F47 /* SilentScrolly */ = {
 			isa = PBXGroup;
 			children = (
-				615EC443205574EC00F2A392 /* SilentScrolly.swift */,
 				615EC444205574EC00F2A392 /* SilentScrollable.swift */,
+				615EC443205574EC00F2A392 /* SilentScrolly.swift */,
 				6154F5EB203B1CC600040F47 /* SilentScrolly.h */,
 				6154F5EC203B1CC600040F47 /* Info.plist */,
 			);

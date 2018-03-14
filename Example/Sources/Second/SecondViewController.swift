@@ -82,10 +82,6 @@ extension SecondViewController: UIScrollViewDelegate {
         hideNavigationBar()
     }
 
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        decideNavigationBarState()
-    }
-
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         showNavigationBar()
         return true
