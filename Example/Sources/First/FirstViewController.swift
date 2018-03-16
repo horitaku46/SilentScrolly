@@ -50,7 +50,6 @@ final class FirstViewController: UIViewController, SilentScrollable {
 
     @objc private func tapRightShowBarButtonItem() {
         let viewController = SecondViewController.make()
-        viewController.hidesBottomBarWhenPushed = true
         navigationController?.show(viewController, sender: nil)
     }
 }

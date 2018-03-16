@@ -18,6 +18,7 @@ final class SecondViewController: UIViewController, SilentScrollable {
     class func make() -> UIViewController {
         let viewController = UIStoryboard(name: "SecondViewController", bundle: nil)
             .instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
+        viewController.hidesBottomBarWhenPushed = true
         return viewController
     }
 
