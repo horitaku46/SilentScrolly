@@ -165,7 +165,7 @@ public extension SilentScrollable where Self: UIViewController {
                 return
         }
 
-        if !isNavigationbarAnimateCompleted {
+        if scrollView.contentSize.height < scrollView.bounds.height || !isNavigationbarAnimateCompleted {
             return
         }
 
