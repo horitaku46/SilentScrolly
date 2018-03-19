@@ -48,6 +48,16 @@ final class FirstViewController: UIViewController, SilentScrollable {
         configureSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationBarWillDisappear()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationBarDidDisappear()
+    }
+
     @objc private func tapRightShowBarButtonItem() {
         let viewController = SecondViewController.make()
         navigationController?.show(viewController, sender: nil)
@@ -58,6 +68,10 @@ extension FirstViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         followNavigationBar()
+    }
+
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        hideNavigationBar()
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {

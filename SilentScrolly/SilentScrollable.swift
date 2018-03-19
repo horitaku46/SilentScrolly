@@ -56,6 +56,10 @@ public extension SilentScrollable where Self: UIViewController {
 
         silentScrolly?.scrollView = scrollView
 
+        silentScrolly?.isNavigationBarShow = true
+        silentScrolly?.isNavigationbarAnimateCompleted = true
+        silentScrolly?.isTransitionCompleted = true
+
         silentScrolly?.showNavigationBarFrameOriginY = statusBarHeight
         silentScrolly?.hideNavigationBarFrameOriginY = -navigationBarHeight
         silentScrolly?.showScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
@@ -149,6 +153,20 @@ public extension SilentScrollable where Self: UIViewController {
         adjustEitherView(scrollView, isShow: false)
     }
 
+    public func navigationBarWill() {
+        showNavigationBar()
+        silentScrolly?.isTransitionCompleted = false
+    }
+
+    public func navigationBarWillDisappear() {
+        showNavigationBar()
+        silentScrolly?.isTransitionCompleted = false
+    }
+
+    public func navigationBarDidDisappear() {
+        silentScrolly?.isTransitionCompleted = true
+    }
+
     private func calcPositiveContentOffsetY(_ scrollView: UIScrollView) -> CGFloat {
         var contentOffsetY = scrollView.contentOffset.y + scrollView.contentInset.top
         contentOffsetY = contentOffsetY > 0 ? contentOffsetY : 0
@@ -157,6 +175,7 @@ public extension SilentScrollable where Self: UIViewController {
 
     private func adjustEitherView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true, completion: (() -> Void)? = nil) {
         guard let isNavigationbarAnimateCompleted = silentScrolly?.isNavigationbarAnimateCompleted,
+            let isTransitionCompleted = silentScrolly?.isTransitionCompleted,
             let showNavigationBarFrameOriginY = silentScrolly?.showNavigationBarFrameOriginY,
             let hideNavigationBarFrameOriginY = silentScrolly?.hideNavigationBarFrameOriginY,
             let showScrollIndicatorInsetsTop = silentScrolly?.showScrollIndicatorInsetsTop,
@@ -165,7 +184,7 @@ public extension SilentScrollable where Self: UIViewController {
                 return
         }
 
-        if scrollView.contentSize.height < scrollView.bounds.height || !isNavigationbarAnimateCompleted {
+        if scrollView.contentSize.height < scrollView.bounds.height || !isNavigationbarAnimateCompleted || !isTransitionCompleted {
             return
         }
 

@@ -69,7 +69,12 @@ final class SecondViewController: UIViewController, SilentScrollable {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        showNavigationBar()
+        navigationBarWillDisappear()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationBarDidDisappear()
     }
 }
 
