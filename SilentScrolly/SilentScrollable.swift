@@ -75,13 +75,14 @@ public extension SilentScrollable where Self: UIViewController {
         silentScrolly?.showScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top
         silentScrolly?.hideScrollIndicatorInsetsTop = scrollView.scrollIndicatorInsets.top - totalHeight
 
-        // FIXME: Because the following adjusts it to the setting that I showed with a example
+        // FIXME: Because the following adjusts it to the setting that I showed with a example.
         if let bottomView = followBottomView {
+            let screenHeight = UIScreen.main.bounds.height
             let eitherSafeAreaInsetsBottom = bottomView is UITabBar ? 0 : safeAreaInsetsBottom
             let bottomViewHeight = bottomView.bounds.height + eitherSafeAreaInsetsBottom
             silentScrolly?.bottomView = bottomView
-            silentScrolly?.showBottomViewFrameOriginY = UIScreen.main.bounds.height - bottomViewHeight
-            silentScrolly?.hideBottomViewFrameOriginY = UIScreen.main.bounds.height
+            silentScrolly?.showBottomViewFrameOriginY = screenHeight - bottomViewHeight
+            silentScrolly?.hideBottomViewFrameOriginY = screenHeight
             silentScrolly?.showContentInsetBottom = bottomView is UITabBar ? 0 : bottomViewHeight
             silentScrolly?.hideContentInsetBottom = bottomView is UITabBar ? -bottomViewHeight : -eitherSafeAreaInsetsBottom
         }
@@ -224,6 +225,7 @@ public extension SilentScrollable where Self: UIViewController {
                 setPosition()
             }, completion: { _ in
                 self.silentScrolly?.isNavigationbarAnimateCompleted = true
+                completion?()
             })
 
             animateBottomView(scrollView, isShow: isShow, animated: animated)

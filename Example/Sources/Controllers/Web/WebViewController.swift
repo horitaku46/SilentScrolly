@@ -1,5 +1,5 @@
 //
-//  FirstViewController.swift
+//  WebViewController.swift
 //  Example
 //
 //  Created by Takuma Horiuchi on 2018/02/20.
@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-final class FirstViewController: UIViewController, SilentScrollable {
+final class WebViewController: UIViewController, SilentScrollable {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return statusBarStyle(showStyle: .lightContent, hideStyle: .default)
@@ -19,7 +19,7 @@ final class FirstViewController: UIViewController, SilentScrollable {
         didSet {
             webView.navigationDelegate = self
             webView.scrollView.delegate = self
-            let url = URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")
+            let url = URL(string: "http://www.keyakizaka46.com/")
             let urlRequest = URLRequest(url: url!)
             webView.load(urlRequest)
         }
@@ -37,7 +37,7 @@ final class FirstViewController: UIViewController, SilentScrollable {
         navigationItem.setRightBarButton(rightShowBarButtonItem, animated: true)
 
         let label = UILabel()
-        label.text = "First"
+        label.text = "Web"
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 17)
         navigationItem.titleView = label
@@ -45,7 +45,7 @@ final class FirstViewController: UIViewController, SilentScrollable {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        configureSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
+        configureSilentScrolly(webView.scrollView)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,12 +59,12 @@ final class FirstViewController: UIViewController, SilentScrollable {
     }
 
     @objc private func tapRightShowBarButtonItem() {
-        let viewController = SecondViewController.make()
+        let viewController = ToolBarViewController.make()
         navigationController?.show(viewController, sender: nil)
     }
 }
 
-extension FirstViewController: UIScrollViewDelegate {
+extension WebViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         followNavigationBar()
@@ -80,7 +80,7 @@ extension FirstViewController: UIScrollViewDelegate {
     }
 }
 
-extension FirstViewController: WKNavigationDelegate {
+extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         showNavigationBar()

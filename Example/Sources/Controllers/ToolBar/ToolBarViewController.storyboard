@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Second View Controller-->
+        <!--Tool Bar View Controller-->
         <scene sceneID="t0b-va-bUu">
             <objects>
-                <viewController storyboardIdentifier="SecondViewController" id="2og-Mb-R6M" customClass="SecondViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ToolBarViewController" id="2og-Mb-R6M" customClass="ToolBarViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zkc-S2-tj1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

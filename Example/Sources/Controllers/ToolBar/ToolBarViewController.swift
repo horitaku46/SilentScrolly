@@ -1,5 +1,5 @@
 //
-//  SecondViewController.swift
+//  ToolBarViewController.swift
 //  Example
 //
 //  Created by Takuma Horiuchi on 2018/02/20.
@@ -9,15 +9,15 @@
 import UIKit
 import WebKit
 
-final class SecondViewController: UIViewController, SilentScrollable {
+final class ToolBarViewController: UIViewController, SilentScrollable {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return statusBarStyle(showStyle: .lightContent, hideStyle: .default)
     }
 
-    class func make() -> UIViewController {
-        let viewController = UIStoryboard(name: "SecondViewController", bundle: nil)
-            .instantiateViewController(withIdentifier: "SecondViewController") as! SecondViewController
+    class func make() -> ToolBarViewController {
+        let viewController = UIStoryboard(name: "ToolBarViewController", bundle: nil)
+            .instantiateViewController(withIdentifier: "ToolBarViewController") as! ToolBarViewController
         viewController.hidesBottomBarWhenPushed = true
         return viewController
     }
@@ -27,7 +27,7 @@ final class SecondViewController: UIViewController, SilentScrollable {
         webConfiguration.ignoresViewportScaleLimits = true
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.load(URLRequest(url: URL(string: "http://www.keyakizaka46.com/s/k46o/diary/member/list?ima=0000")!))
+        webView.load(URLRequest(url: URL(string: "http://www.keyakizaka46.com/")!))
         return webView
     }()
 
@@ -56,7 +56,7 @@ final class SecondViewController: UIViewController, SilentScrollable {
         view.bringSubview(toFront: toolBar)
 
         let label = UILabel()
-        label.text = "Second"
+        label.text = "ToolBar"
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 17)
         navigationItem.titleView = label
@@ -78,7 +78,7 @@ final class SecondViewController: UIViewController, SilentScrollable {
     }
 }
 
-extension SecondViewController: UIScrollViewDelegate {
+extension ToolBarViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         followNavigationBar()
@@ -94,7 +94,7 @@ extension SecondViewController: UIScrollViewDelegate {
     }
 }
 
-extension SecondViewController: WKNavigationDelegate {
+extension ToolBarViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         showNavigationBar()
