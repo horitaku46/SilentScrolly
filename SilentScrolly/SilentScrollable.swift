@@ -10,14 +10,23 @@ import UIKit
 
 public protocol SilentScrollable: class {
     var silentScrolly: SilentScrolly? { get set }
+    func statusBarStyle(showStyle: UIStatusBarStyle, hideStyle: UIStatusBarStyle) -> UIStatusBarStyle
+    func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView?)
+    func followNavigationBar()
+    func showNavigationBar()
+    func hideNavigationBar()
+    func navigationBarWillDisappear()
+    func navigationBarDidDisappear()
 }
 
 public extension SilentScrollable where Self: UIViewController {
 
     public func statusBarStyle(showStyle: UIStatusBarStyle, hideStyle: UIStatusBarStyle) -> UIStatusBarStyle {
-        guard let _ = silentScrolly,
-            let preferredStatusBarStyle = silentScrolly?.preferredStatusBarStyle else {
-            silentScrolly = SilentScrolly()
+        guard let preferredStatusBarStyle = silentScrolly?.preferredStatusBarStyle else {
+            /// To consider whether statusBarStyle and configureSilentScrolly precede.
+            if silentScrolly == nil {
+                silentScrolly = SilentScrolly()
+            }
             silentScrolly?.preferredStatusBarStyle = showStyle
             silentScrolly?.showStatusBarStyle = showStyle
             silentScrolly?.hideStatusBarStyle = hideStyle
@@ -42,7 +51,7 @@ public extension SilentScrollable where Self: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
 
-    public func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil, isAddObserver: Bool = true) {
+    public func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil) {
         guard let navigationBarHeight = navigationController?.navigationBar.bounds.height,
             let safeAreaInsetsBottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom else {
             return
@@ -50,6 +59,7 @@ public extension SilentScrollable where Self: UIViewController {
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let totalHeight = statusBarHeight + navigationBarHeight
 
+        /// To consider whether statusBarStyle and configureSilentScrolly precede.
         if silentScrolly == nil {
             silentScrolly = SilentScrolly()
         }
@@ -76,13 +86,16 @@ public extension SilentScrollable where Self: UIViewController {
             silentScrolly?.hideContentInsetBottom = bottomView is UITabBar ? -bottomViewHeight : -eitherSafeAreaInsetsBottom
         }
 
-        if isAddObserver {
-            NotificationCenter.default.addObserver(forName: .UIDeviceOrientationDidChange, object: nil, queue: nil) { [weak self] in
-                self?.orientationDidChange($0)
+        if let isAddObserver = silentScrolly?.isAddObserver {
+            if isAddObserver {
+                NotificationCenter.default.addObserver(forName: .UIDeviceOrientationDidChange, object: nil, queue: nil) { [weak self] in
+                    self?.orientationDidChange($0)
+                }
+                NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: nil) { [weak self] in
+                    self?.didBecomeActive($0)
+                }
             }
-            NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: nil) { [weak self] in
-                self?.didBecomeActive($0)
-            }
+            silentScrolly?.isAddObserver = false
         }
     }
 
@@ -95,7 +108,7 @@ public extension SilentScrollable where Self: UIViewController {
         // animation completed because the calculation is crazy
         adjustEitherView(scrollView, isShow: true, animated: false) { [weak self] in
             guard let me = self else { return }
-            me.configureSilentScrolly(scrollView, followBottomView: me.silentScrolly?.bottomView, isAddObserver: false)
+            me.configureSilentScrolly(scrollView, followBottomView: me.silentScrolly?.bottomView)
         }
         adjustEitherView(scrollView, isShow: true, animated: false)
     }
@@ -151,11 +164,6 @@ public extension SilentScrollable where Self: UIViewController {
             return
         }
         adjustEitherView(scrollView, isShow: false)
-    }
-
-    public func navigationBarWill() {
-        showNavigationBar()
-        silentScrolly?.isTransitionCompleted = false
     }
 
     public func navigationBarWillDisappear() {

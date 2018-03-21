@@ -21,6 +21,7 @@
 		6176604C203BDCCD0049B35E /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6176604B203BDCCD0049B35E /* FirstViewController.swift */; };
 		6176604D203BDD330049B35E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6176603D203BDC2F0049B35E /* AppDelegate.swift */; };
 		6176604E203BDD3F0049B35E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61766037203BDC2F0049B35E /* Assets.xcassets */; };
+		61F540C8206238BF006E11FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61F540C7206238BF006E11FB /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		61766047203BDCB20049B35E /* SecondViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SecondViewController.storyboard; sourceTree = "<group>"; };
 		61766049203BDCC50049B35E /* FirstViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FirstViewController.storyboard; sourceTree = "<group>"; };
 		6176604B203BDCCD0049B35E /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		61F540C7206238BF006E11FB /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		61766036203BDC2F0049B35E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				61F540C7206238BF006E11FB /* LaunchScreen.storyboard */,
 				61766037203BDC2F0049B35E /* Assets.xcassets */,
 				61766038203BDC2F0049B35E /* Info.plist */,
 			);
@@ -251,6 +254,7 @@
 				6176604E203BDD3F0049B35E /* Assets.xcassets in Resources */,
 				6176604A203BDCC50049B35E /* FirstViewController.storyboard in Resources */,
 				61766042203BDC520049B35E /* TabBarController.storyboard in Resources */,
+				61F540C8206238BF006E11FB /* LaunchScreen.storyboard in Resources */,
 				61766048203BDCB20049B35E /* SecondViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

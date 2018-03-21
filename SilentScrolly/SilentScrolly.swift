@@ -25,6 +25,7 @@ public struct SilentScrolly {
     public var isNavigationBarShow = true
     public var isNavigationbarAnimateCompleted = true
     public var isTransitionCompleted = true
+    public var isAddObserver = true
 
     public var prevPositiveContentOffsetY: CGFloat = 0
 
