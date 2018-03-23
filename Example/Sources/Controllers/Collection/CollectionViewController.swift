@@ -42,6 +42,11 @@ final class CollectionViewController: UIViewController, SilentScrollable {
         navigationItem.titleView = label
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        silentDidLayoutSubviews()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         configureSilentScrolly(collectionView, followBottomView: tabBarController?.tabBar)
@@ -49,19 +54,24 @@ final class CollectionViewController: UIViewController, SilentScrollable {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationBarWillDisappear()
+        silentWillDisappear()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationBarDidDisappear()
+        silentDidDisappear()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        silentWillTranstion()
     }
 }
 
 extension CollectionViewController: UICollectionViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        followNavigationBar()
+        silentDidScroll()
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
@@ -88,6 +98,6 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let isPortraint = UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation)
         let itemSide: CGFloat = isPortraint ? (collectionView.frame.width - 2) / 3 : (collectionView.frame.width - 3) / 4
-        return CGSize(width: itemSide, height: itemSide)
+        return CGSize(width: floor(itemSide), height: floor(itemSide))
     }
 }

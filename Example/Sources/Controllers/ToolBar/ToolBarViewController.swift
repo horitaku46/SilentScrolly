@@ -62,6 +62,11 @@ final class ToolBarViewController: UIViewController, SilentScrollable {
         navigationItem.titleView = label
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        silentDidLayoutSubviews()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         configureSilentScrolly(webView.scrollView, followBottomView: toolBar)
@@ -69,23 +74,28 @@ final class ToolBarViewController: UIViewController, SilentScrollable {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationBarWillDisappear()
+        silentWillDisappear()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationBarDidDisappear()
+        silentDidDisappear()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        silentWillTranstion()
     }
 }
 
 extension ToolBarViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        followNavigationBar()
+        silentDidScroll()
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        hideNavigationBar()
+        silentDidZoom()
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {

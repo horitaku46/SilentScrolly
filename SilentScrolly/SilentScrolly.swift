@@ -23,7 +23,6 @@ public struct SilentScrolly {
     public var scrollView: UIScrollView? = nil
 
     public var isNavigationBarShow = true
-    public var isNavigationbarAnimateCompleted = true
     public var isTransitionCompleted = true
     public var isAddObserver = true
 

@@ -43,19 +43,29 @@ final class WebViewController: UIViewController, SilentScrollable {
         navigationItem.titleView = label
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        silentDidLayoutSubviews()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        configureSilentScrolly(webView.scrollView)
+        configureSilentScrolly(webView.scrollView, followBottomView: tabBarController?.tabBar)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationBarWillDisappear()
+        silentWillDisappear()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        navigationBarDidDisappear()
+        silentDidDisappear()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        silentWillTranstion()
     }
 
     @objc private func tapRightShowBarButtonItem() {
@@ -67,11 +77,7 @@ final class WebViewController: UIViewController, SilentScrollable {
 extension WebViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        followNavigationBar()
-    }
-
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        hideNavigationBar()
+        silentDidScroll()
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {

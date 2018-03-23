@@ -11,12 +11,15 @@ import UIKit
 public protocol SilentScrollable: class {
     var silentScrolly: SilentScrolly? { get set }
     func statusBarStyle(showStyle: UIStatusBarStyle, hideStyle: UIStatusBarStyle) -> UIStatusBarStyle
-    func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView?)
-    func followNavigationBar()
+    func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView?, completion: (() -> Void)?)
     func showNavigationBar()
     func hideNavigationBar()
-    func navigationBarWillDisappear()
-    func navigationBarDidDisappear()
+    func silentWillDisappear()
+    func silentDidDisappear()
+    func silentDidLayoutSubviews()
+    func silentWillTranstion()
+    func silentDidScroll()
+    func silentDidZoom()
 }
 
 public extension SilentScrollable where Self: UIViewController {
@@ -51,7 +54,7 @@ public extension SilentScrollable where Self: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
 
-    public func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView? = nil) {
+    public func configureSilentScrolly(_ scrollView: UIScrollView, followBottomView: UIView?, completion: (() -> Void)? = nil) {
         guard let navigationBarHeight = navigationController?.navigationBar.bounds.height,
             let safeAreaInsetsBottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom else {
             return
@@ -67,7 +70,6 @@ public extension SilentScrollable where Self: UIViewController {
         silentScrolly?.scrollView = scrollView
 
         silentScrolly?.isNavigationBarShow = true
-        silentScrolly?.isNavigationbarAnimateCompleted = true
         silentScrolly?.isTransitionCompleted = true
 
         silentScrolly?.showNavigationBarFrameOriginY = statusBarHeight
@@ -92,39 +94,80 @@ public extension SilentScrollable where Self: UIViewController {
                 NotificationCenter.default.addObserver(forName: .UIDeviceOrientationDidChange, object: nil, queue: nil) { [weak self] in
                     self?.orientationDidChange($0)
                 }
-                NotificationCenter.default.addObserver(forName: .UIApplicationDidBecomeActive, object: nil, queue: nil) { [weak self] in
-                    self?.didBecomeActive($0)
+                NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: nil, queue: nil) { [weak self] in
+                    self?.didEnterBackground($0)
                 }
             }
             silentScrolly?.isAddObserver = false
         }
+
+        completion?()
     }
 
     private func orientationDidChange(_ notification: Notification) {
         guard isViewLoaded,
             let _ = view.window,
+            let scrollView = silentScrolly?.scrollView,
+            let isShow = silentScrolly?.isNavigationBarShow else {
+            return
+        }
+        adjustEitherView(scrollView, isShow: isShow, animated: false)
+    }
+
+    private func didEnterBackground(_ notification: Notification) {
+        guard isViewLoaded,
+            let _ = view.window,
             let scrollView = silentScrolly?.scrollView else {
+                return
+        }
+        adjustEitherView(scrollView, isShow: true, animated: false)
+    }
+
+    public func showNavigationBar() {
+        guard let scrollView = silentScrolly?.scrollView else {
+            return
+        }
+        adjustEitherView(scrollView, isShow: true)
+    }
+
+    public func hideNavigationBar() {
+        guard let scrollView = silentScrolly?.scrollView else {
+            return
+        }
+        adjustEitherView(scrollView, isShow: false)
+    }
+
+    public func silentWillDisappear() {
+        showNavigationBar()
+        silentScrolly?.isTransitionCompleted = false
+    }
+
+    public func silentDidDisappear() {
+        silentScrolly?.isTransitionCompleted = true
+    }
+
+    public func silentDidLayoutSubviews() {
+        guard let scrollView = silentScrolly?.scrollView else {
             return
         }
         // animation completed because the calculation is crazy
         adjustEitherView(scrollView, isShow: true, animated: false) { [weak self] in
             guard let me = self else { return }
-            me.configureSilentScrolly(scrollView, followBottomView: me.silentScrolly?.bottomView)
+            me.configureSilentScrolly(scrollView, followBottomView: me.silentScrolly?.bottomView) { [weak self] in
+                self?.adjustEitherView(scrollView, isShow: true, animated: false)
+                scrollView.setZoomScale(1, animated: false)
+            }
+        }
+    }
+
+    public func silentWillTranstion() {
+        guard let scrollView = silentScrolly?.scrollView else {
+            return
         }
         adjustEitherView(scrollView, isShow: true, animated: false)
     }
 
-    private func didBecomeActive(_ notification: Notification) {
-        guard isViewLoaded,
-            let _ = view.window,
-            let scrollView = silentScrolly?.scrollView,
-            let isShow = silentScrolly?.isNavigationBarShow else {
-                return
-        }
-        adjustEitherView(scrollView, isShow: isShow, animated: false)
-    }
-
-    public func followNavigationBar() {
+    public func silentDidScroll() {
         guard let scrollView = silentScrolly?.scrollView,
             let prevPositiveContentOffsetY = silentScrolly?.prevPositiveContentOffsetY else {
                 return
@@ -153,27 +196,14 @@ public extension SilentScrollable where Self: UIViewController {
         silentScrolly?.prevPositiveContentOffsetY = positiveContentOffsetY
     }
 
-    public func showNavigationBar() {
+    public func silentDidZoom() {
         guard let scrollView = silentScrolly?.scrollView else {
             return
         }
-        adjustEitherView(scrollView, isShow: true)
-    }
-
-    public func hideNavigationBar() {
-        guard let scrollView = silentScrolly?.scrollView else {
-            return
+        func setNavigationBar() {
+            scrollView.zoomScale <= 1 ? showNavigationBar() : hideNavigationBar()
         }
-        adjustEitherView(scrollView, isShow: false)
-    }
-
-    public func navigationBarWillDisappear() {
-        showNavigationBar()
-        silentScrolly?.isTransitionCompleted = false
-    }
-
-    public func navigationBarDidDisappear() {
-        silentScrolly?.isTransitionCompleted = true
+        scrollView.isZooming ? setNavigationBar() : scrollView.setZoomScale(1, animated: true)
     }
 
     private func calcPositiveContentOffsetY(_ scrollView: UIScrollView) -> CGFloat {
@@ -183,8 +213,7 @@ public extension SilentScrollable where Self: UIViewController {
     }
 
     private func adjustEitherView(_ scrollView: UIScrollView, isShow: Bool, animated: Bool = true, completion: (() -> Void)? = nil) {
-        guard let isNavigationbarAnimateCompleted = silentScrolly?.isNavigationbarAnimateCompleted,
-            let isTransitionCompleted = silentScrolly?.isTransitionCompleted,
+        guard let isTransitionCompleted = silentScrolly?.isTransitionCompleted,
             let showNavigationBarFrameOriginY = silentScrolly?.showNavigationBarFrameOriginY,
             let hideNavigationBarFrameOriginY = silentScrolly?.hideNavigationBarFrameOriginY,
             let showScrollIndicatorInsetsTop = silentScrolly?.showScrollIndicatorInsetsTop,
@@ -193,7 +222,7 @@ public extension SilentScrollable where Self: UIViewController {
                 return
         }
 
-        if scrollView.contentSize.height < scrollView.bounds.height || !isNavigationbarAnimateCompleted || !isTransitionCompleted {
+        if scrollView.contentSize.height < scrollView.bounds.height || !isTransitionCompleted {
             return
         }
 
@@ -219,12 +248,9 @@ public extension SilentScrollable where Self: UIViewController {
         }
 
         if currentNavigationBarOriginY != eitherNavigationBarFrameOriginY && scrollView.scrollIndicatorInsets.top != eitherScrollIndicatorInsetsTop {
-            silentScrolly?.isNavigationbarAnimateCompleted = false
-
             UIView.animate(withDuration: SilentScrolly.Const.animateDuration, animations: {
                 setPosition()
             }, completion: { _ in
-                self.silentScrolly?.isNavigationbarAnimateCompleted = true
                 completion?()
             })
 
