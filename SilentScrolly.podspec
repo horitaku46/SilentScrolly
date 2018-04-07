@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = "SilentScrolly"
-    s.version     = "1.0.7"
+    s.version     = "1.0.8"
     s.summary     = "Scroll to hide navigationBar, tabBar and toolBar."
     s.description = <<-DESC
                     Adding too much UIGestureRecognizer to the UIView makes handling difficult, so it was handled by UIScrollViewDelegate.
