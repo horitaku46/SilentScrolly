@@ -18,6 +18,9 @@ Scroll to hide navigationBar, tabBar and toolBar.
 ## Features
 Adding too much `UIGestureRecognizer` to the `UIView` makes handling difficult, so it was handled by `UIScrollViewDelegate`.
 
+## Translation
+Mr. [Gargo](https://github.com/Gargo) translated [this README into Russian](http://gargo.of.by/silentscrolly/)!🙇‍♂️
+
 ## Requirements
 - Xcode 9.0+
 - iOS 10+
